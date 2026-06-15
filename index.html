@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPR Invest - Artificial Intelligence | Note de référence interne</title>
+<style>
+:root{
+  --cyan:#009EE0; --cyan-d:#0082b8; --navy:#001C4B; --navy-2:#0a2a63;
+  --white:#ffffff; --gray:#F5F5F5; --bluelight:#D6EAF7;
+  --ink:#001C4B; --muted:#5b6b85; --muted-2:#8497b4;
+  --line:#e4ebf4; --line-2:#d6eaf7;
+  --pos:#1f9d57; --neg:#d0432b;
+  --shadow:0 8px 26px rgba(0,28,75,.07); --shadow-l:0 16px 44px rgba(0,28,75,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 1em}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 26px}
+.mono{font-variant-numeric:tabular-nums}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+.eyebrow:before{content:"";width:24px;height:2px;background:var(--cyan);border-radius:2px}
+
+/* ---------- top bar ---------- */
+header.top{position:sticky;top:0;z-index:60;background:rgba(0,28,75,.96);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:64px}
+.brand{display:flex;align-items:center}
+.logobox{background:#fff;border-radius:7px;padding:7px 12px;display:flex;align-items:center}
+.logobox img{height:30px;display:block}
+.top nav{margin-left:auto;display:flex;gap:4px}
+.top nav a{color:#c4d3e6;text-decoration:none;font-size:13.5px;padding:7px 13px;border-radius:8px;transition:.15s}
+.top nav a:hover{background:rgba(255,255,255,.1);color:#fff}
+.top .badge-int{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--navy);background:var(--cyan);padding:5px 10px;border-radius:6px}
+@media(max-width:1040px){.top nav{display:none}}
+
+/* ---------- hero ---------- */
+.hero{background:
+   radial-gradient(900px 480px at 82% -20%,rgba(0,158,224,.30),transparent 60%),
+   radial-gradient(700px 500px at 0% 120%,rgba(0,158,224,.12),transparent 55%),
+   linear-gradient(180deg,var(--navy),#02123a);
+   color:#eaf1fb;padding:56px 0 44px;border-bottom:3px solid var(--cyan)}
+.hero h1{font-size:clamp(28px,4.4vw,46px);line-height:1.06;color:#fff;max-width:18ch;margin-top:16px}
+.hero .lead{font-size:clamp(15px,1.7vw,18px);color:#bcd0ea;max-width:74ch;margin-top:16px}
+.hero .meta{margin-top:16px;font-size:12.5px;color:var(--muted-2);display:flex;flex-wrap:wrap;gap:8px 20px}
+.hero .meta b{color:#dce8f7;font-weight:600}
+.kpis{margin-top:30px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:16px}
+.kpi .lab{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
+.kpi .val{font-size:25px;font-weight:800;color:#fff;margin-top:6px;letter-spacing:-.02em}
+.kpi .sub{font-size:12px;color:#9fb6d4;margin-top:3px}
+.disc-mini{margin-top:24px;font-size:11.5px;color:#7c92b4;max-width:90ch}
+
+/* ---------- sections ---------- */
+section{padding:58px 0}
+section.alt{background:var(--gray)}
+.sec-head{margin-bottom:26px}
+.sec-head h2{font-size:clamp(22px,3vw,31px);margin-top:9px}
+.sec-head p{color:var(--muted);max-width:82ch;margin-top:10px}
+
+/* ---------- chart ---------- */
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 20px 12px;box-shadow:var(--shadow-l)}
+.ctrls{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.ctrl-group{display:flex;flex-direction:column;gap:8px}
+.ctrl-group .glab{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.btnrow{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:12.5px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);padding:6px 12px;border-radius:8px;transition:.13s;display:inline-flex;align-items:center;gap:8px;line-height:1}
+.chip:hover{border-color:var(--cyan);color:var(--cyan-d)}
+.chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip .dot{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.chip.series.active{background:var(--bluelight);border-color:var(--cyan);color:var(--navy);font-weight:600}
+.chip.series.fund.active{background:var(--cyan);border-color:var(--cyan);color:#fff}
+.chip.ep{border-style:dashed}
+.chartwrap{position:relative;margin-top:16px}
+#chart{width:100%;height:580px;display:block;cursor:crosshair;touch-action:none;user-select:none}
+#chart.grabbing{cursor:grabbing}
+@media(max-width:680px){#chart{height:430px}}
+.tip{position:absolute;pointer-events:none;z-index:5;background:#fff;border:1px solid var(--line-2);border-radius:11px;padding:11px 13px;font-size:12.5px;color:var(--ink);min-width:190px;box-shadow:0 14px 36px rgba(0,28,75,.18);opacity:0;transition:opacity .1s}
+.tip .tdate{font-weight:700;margin-bottom:8px;font-size:12px;color:var(--navy);border-bottom:1px solid var(--line);padding-bottom:6px}
+.tip .trow{display:flex;align-items:center;gap:8px;margin:4px 0}
+.tip .trow .tn{display:flex;align-items:center;gap:7px;color:var(--muted)}
+.tip .trow .tv{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;color:var(--navy)}
+.tip .sw{width:9px;height:9px;border-radius:50%}
+.evttip{position:absolute;pointer-events:none;z-index:6;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:12px 14px;max-width:320px;box-shadow:0 16px 40px rgba(0,28,75,.2);opacity:0;transition:opacity .1s;font-size:12.5px}
+.evttip .ettitle{font-weight:700;color:var(--navy);font-size:13.5px;margin:7px 0 6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.evttip .etshort{color:var(--muted);line-height:1.5;margin-bottom:8px}
+.evttip .etmove{font-weight:700;font-variant-numeric:tabular-nums}
+.evttip .ethint{margin-top:9px;font-size:11px;color:var(--cyan-d);font-weight:700;letter-spacing:.02em}
+.livelegend{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:14px;padding-top:6px}
+.livelegend .ll{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--navy)}
+.livelegend .ll i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.livelegend .ll b{font-variant-numeric:tabular-nums}
+.chart-foot{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center;padding:14px 2px 6px;font-size:11.5px;color:var(--muted)}
+.chart-foot .base{color:var(--navy);font-weight:500}
+.hint{font-size:11.5px;color:var(--muted)}
+.evt-marker{cursor:pointer}
+.evt-marker:hover .mk-ring{opacity:1}
+
+/* ---------- events ---------- */
+.events-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:24px}
+@media(max-width:860px){.events-grid{grid-template-columns:1fr}}
+.evt-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 16px;cursor:pointer;transition:.15s;display:flex;gap:13px;align-items:flex-start}
+.evt-card:hover{border-color:var(--cyan);box-shadow:var(--shadow);transform:translateY(-2px)}
+.evt-num{flex:0 0 auto;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff}
+.evt-meta{min-width:0}
+.evt-meta .dt{font-size:11.5px;color:var(--muted);display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.evt-meta h4{font-size:15px;color:var(--navy);margin:4px 0 4px}
+.evt-meta .sh{font-size:13px;color:var(--muted)}
+.badge{font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:800;padding:3px 8px;border-radius:6px}
+.badge.ia{background:#e2f4fc;color:#0082b8}
+.badge.macro{background:#e1e7f2;color:#001C4B}
+.badge.fonds{background:#fdeccd;color:#9a6a00}
+.mv{font-weight:700;font-variant-numeric:tabular-nums}
+.mv.pos{color:var(--pos)}.mv.neg{color:var(--neg)}
+
+/* ---------- modal ---------- */
+.modal-bg{position:fixed;inset:0;z-index:100;background:rgba(0,18,50,.55);backdrop-filter:blur(4px);display:none;opacity:0;transition:opacity .18s}
+.modal-bg.open{display:block;opacity:1}
+.modal{position:fixed;z-index:101;top:50%;left:50%;transform:translate(-50%,-48%) scale(.98);width:min(680px,92vw);max-height:88vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(0,18,50,.4);display:none;opacity:0;transition:.2s}
+.modal.open{display:block;opacity:1;transform:translate(-50%,-50%) scale(1)}
+.modal .mtop{padding:22px 26px 16px;border-bottom:1px solid var(--line);position:relative}
+.modal .mclose{position:absolute;top:16px;right:16px;width:34px;height:34px;border:none;border-radius:8px;background:var(--gray);color:var(--muted);font-size:17px;cursor:pointer}
+.modal .mclose:hover{background:var(--bluelight);color:var(--navy)}
+.modal .mdt{font-size:12.5px;color:var(--muted);display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.modal h3{font-size:21px;padding-right:34px;color:var(--navy)}
+.modal .mbody{padding:18px 26px 6px;font-size:14.5px;color:#33445c}
+.modal .mbody p{margin-bottom:.9em}
+.impact{margin:6px 26px 12px;background:var(--gray);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.impact .il{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.impact .ival{font-size:15px;font-weight:700}
+.impact .hold{font-size:13px;color:var(--muted);margin-top:9px}
+.impact .hold b{color:var(--navy)}
+.sources{padding:2px 26px 22px;font-size:12.5px}
+.sources .sl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.sources a{display:inline-block;color:var(--cyan-d);text-decoration:none;margin:0 12px 6px 0;border-bottom:1px solid rgba(0,158,224,.3)}
+.sources a:hover{border-color:var(--cyan)}
+
+/* ---------- cards / info ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.card h3{font-size:18px;margin-bottom:4px;color:var(--navy)}
+.card .ph{color:var(--muted);font-size:13px;margin-bottom:14px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:7px;background:var(--bluelight);color:var(--navy)}
+.bigpct{font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--navy)}
+.dimhead{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.dimnum{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;flex:0 0 auto}
+
+.idtable{width:100%;border-collapse:collapse;font-size:14px}
+.idtable td{padding:10px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.idtable tr:last-child td{border-bottom:none}
+.idtable td:first-child{color:var(--muted);width:40%}
+.idtable td:last-child{font-weight:600;text-align:right}
+.idtable td.lng{text-align:left;font-weight:500;color:#33445c}
+
+.hold-row{display:grid;grid-template-columns:22px 1.7fr 2.2fr 54px;gap:11px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.hold-row:last-child{border:none}
+.hold-row .rk{color:var(--muted-2);font-weight:700;font-size:12px}
+.hold-row .nm{font-weight:600;color:var(--navy)}
+.hold-row .nm small{display:block;font-weight:500;color:var(--muted);font-size:11.5px}
+.bar{height:9px;border-radius:5px;background:var(--gray);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--navy),var(--cyan))}
+.hold-row .wt{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;color:var(--navy)}
+
+.alloc{display:flex;flex-direction:column;gap:13px}
+.alloc .arow .at{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:5px}
+.alloc .arow .at b{font-variant-numeric:tabular-nums}
+.alloc .bar2{height:11px;border-radius:6px;background:var(--gray);overflow:hidden}
+.alloc .bar2>i{display:block;height:100%;border-radius:6px}
+.alloc .idx{font-size:11.5px;color:var(--muted-2)}
+
+.perf-table{width:100%;border-collapse:collapse;font-size:14px}
+.perf-table th,.perf-table td{padding:11px 10px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.perf-table th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.perf-table td:first-child,.perf-table th:first-child{text-align:left;font-weight:600;color:var(--navy)}
+.perf-table .pos{color:var(--pos);font-weight:700}
+.perf-table .neg{color:var(--neg);font-weight:700}
+.perf-table tr.fundrow td{background:var(--bluelight)}
+
+.infobox{background:var(--navy);color:#dce8f7;border-radius:14px;padding:24px 26px;margin-top:8px;border-left:4px solid var(--cyan)}
+.infobox h3{color:#fff;font-size:18px;margin-bottom:8px}
+.infobox p{color:#bcd0ea;margin-bottom:0;font-size:14px}
+.infobox .hi{color:#5cc6f2;font-weight:600}
+
+.note{font-size:12.5px;color:var(--muted);margin-top:14px}
+.factrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.fact{font-size:12.5px;padding:7px 13px;border-radius:8px;background:#fff;border:1px solid var(--line);color:var(--navy)}
+.fact b{color:var(--cyan-d)}
+
+.these-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.these-card .n{font-size:13px;font-weight:800;color:var(--cyan);letter-spacing:.04em}
+.these-card h3{font-size:17px;margin:8px 0 8px;color:var(--navy)}
+.these-card p{color:var(--muted);font-size:14px;margin:0}
+.subhead{font-size:18px;color:var(--navy);font-weight:700;margin:34px 0 14px}
+.driver{background:#fff;border:1px solid var(--line);border-radius:13px;padding:20px;box-shadow:var(--shadow)}
+.driver .dn{width:30px;height:30px;border-radius:8px;background:var(--bluelight);color:var(--navy);display:grid;place-items:center;font-weight:800;font-size:14px;margin-bottom:12px}
+.driver h4{font-size:15px;color:var(--navy);margin-bottom:6px}
+.driver p{font-size:13.5px;color:var(--muted);margin:0}
+
+footer{background:var(--navy);color:#9fb3cf;padding:42px 0 52px;font-size:12.5px;border-top:3px solid var(--cyan)}
+footer h4{color:#fff;font-size:13px;letter-spacing:.04em;margin-bottom:10px;text-transform:uppercase}
+footer a{color:#7fd0f0}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+@media(max-width:860px){footer .cols{grid-template-columns:1fr}}
+footer .disc{margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);color:#7e93b1;line-height:1.65}
+.legendmini{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#bcccdf}
+.legendmini span{display:inline-flex;align-items:center;gap:8px}
+.legendmini i{width:16px;height:3px;border-radius:2px;display:inline-block}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="logobox"><img src="cpram-logo.jpg" alt="CPRAM"></span></div>
+    <nav>
+      <a href="#graphique">Graphique &amp; événements</a>
+      <a href="#strategie">Stratégie &amp; univers</a>
+      <a href="#portefeuille">Portefeuille</a>
+      <a href="#performance">Performance</a>
+      <a href="#these">Thèse &amp; contexte</a>
+    </nav>
+    <span class="badge-int">Document de travail interne</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Note de référence pour l'équipe commerciale</div>
+    <h1>CPR Invest - Artificial Intelligence</h1>
+    <p class="lead">Support de maîtrise du fonds à l'usage de l'équipe commerciale&nbsp;: caractéristiques, processus de gestion, composition et performance, complétés d'une lecture événementielle du parcours de la valeur liquidative. Chaque mouvement notable de la VL est rattaché à un fait de marché vérifié et sourcé.</p>
+    <div class="meta">
+      <span>Part&nbsp;: <b>I EUR (Acc.)</b></span>
+      <span>ISIN&nbsp;: <b>LU2860962476</b></span>
+      <span>Indice&nbsp;: <b>MSCI ACWI IMI AI Select Issuer Capped</b></span>
+      <span>Gérants&nbsp;: <b>G. Uettwiller &amp; A. Blein</b></span>
+      <span>SFDR&nbsp;: <b>Article 8</b></span>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Valeur liquidative</div><div class="val">155,90 €</div><div class="sub">au 31/05/2026 · base 100 le 10/10/2024</div></div>
+      <div class="kpi"><div class="lab">Perf. depuis création</div><div class="val">+55,9 %</div><div class="sub">soit +31,3 % annualisé · indice +33,1 %</div></div>
+      <div class="kpi"><div class="lab">Performance 2026 (YTD)</div><div class="val">+34,9 %</div><div class="sub">indice +30,0 % · écart +4,9 pts</div></div>
+      <div class="kpi"><div class="lab">Actifs gérés</div><div class="val">≈ 325 M€</div><div class="sub">57 positions · indicateur de risque 5/7</div></div>
+    </div>
+    <p class="disc-mini">Communication promotionnelle destinée aux investisseurs professionnels. Données&nbsp;: factsheet CPRAM au 31/05/2026&nbsp;; VL quotidiennes jusqu'au 08/06/2026. Les performances supérieures à 1 an sont annualisées. Les performances passées ne préjugent pas des performances futures.</p>
+  </div>
+</div>
+
+<!-- CHART -->
+<section class="alt" id="graphique">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">01 · Lecture événementielle</div>
+      <h2>Parcours de la valeur liquidative &amp; événements de marché</h2>
+      <p>Performance indexée en base 100, nette de frais. Par défaut, la comparaison démarre au 31/12/2025&nbsp;: l'ensemble des fonds disposant d'un historique complet sur 2026, tous sont ramenés à 100 à cette date pour une comparaison homogène. Élargir la période permet de visualiser les événements de 2024-2025. Les points numérotés sur la courbe du fonds renvoient à un événement&nbsp;: survoler pour un aperçu, cliquer pour le détail complet et les sources.</p>
+    </div>
+
+    <div class="panel">
+      <div class="ctrls">
+        <div class="ctrl-group">
+          <div class="glab">Période</div>
+          <div class="btnrow" id="rangeBtns"></div>
+        </div>
+        <div class="ctrl-group">
+          <div class="glab">Zoom sur un épisode</div>
+          <div class="btnrow" id="epBtns"></div>
+        </div>
+      </div>
+
+      <div class="ctrl-group" style="margin-top:16px">
+        <div class="glab">Fonds &amp; concurrents · comparaison (cliquer pour afficher / masquer)</div>
+        <div class="btnrow" id="seriesBtns"></div>
+      </div>
+
+      <div class="chartwrap">
+        <svg id="chart" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="tip" id="tip"></div>
+        <div class="evttip" id="evtTip"></div>
+      </div>
+
+      <div class="livelegend" id="liveLegend"></div>
+
+      <div class="chart-foot">
+        <div class="base" id="baseNote"></div>
+        <div class="hint">Molette&nbsp;: zoom &nbsp;·&nbsp; glisser&nbsp;: déplacer &nbsp;·&nbsp; double-clic&nbsp;: réinitialiser</div>
+      </div>
+      <div class="chart-foot" style="padding-top:0">
+        <div></div>
+        <div>Performance indexée recalculée à l'ouverture de la fenêtre affichée. ODDO BHF&nbsp;: historique disponible à partir du 10/12/2024. Sources cours&nbsp;: CPRAM, Allianz GI, DWS, ODDO BHF, Mirova, LFDE, Euronext (NVIDIA).</div>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:42px;margin-bottom:4px">
+      <h2 style="font-size:22px">Chronologie des événements</h2>
+      <p>17 faits de marché rattachés à un mouvement réel de la VL et aux valeurs du portefeuille concernées. Cliquer sur une fiche pour le détail complet et les sources. Catégories&nbsp;: <span style="color:#0082b8;font-weight:600">IA</span> · <span style="color:#001C4B;font-weight:600">Macro / politique</span> · <span style="color:#9a6a00;font-weight:600">Fonds / positionnement</span>.</p>
+    </div>
+    <div class="events-grid" id="eventsGrid"></div>
+  </div>
+</section>
+
+<!-- STRATEGIE -->
+<section id="strategie">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">02 · Stratégie &amp; univers d'investissement</div>
+      <h2>Un univers structuré en trois dimensions</h2>
+      <p>L'univers d'investissement (~200 valeurs, revu au moins une fois par an) est découpé en trois dimensions et douze sous-dimensions. Deux partis pris caractérisent la gestion&nbsp;: une surpondération des <b>infrastructures</b> de l'IA par rapport à la concurrence, et l'<b>absence d'exposition à la robotique</b> (jugée trop cyclique et dépendante du cycle industriel chinois et du secteur automobile).</p>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="dimhead"><div class="dimnum" style="background:var(--navy)">1</div><h3>Infrastructures de l'IA</h3></div>
+        <div class="ph">L'infrastructure physique qui fait fonctionner l'IA</div>
+        <div class="bigpct">81 %</div>
+        <div class="tag" style="margin-top:8px">du portefeuille · ~60 % de l'univers</div>
+        <p style="margin-top:14px;font-size:13.5px;color:var(--muted)">Fournisseurs de semi-conducteurs, concepteurs de puces (calcul, réseau, énergie), hyperscalers &amp; centres de données. Bénéficiaires directs des investissements des hyperscalers.</p>
+      </div>
+      <div class="card">
+        <div class="dimhead"><div class="dimnum" style="background:var(--cyan)">2</div><h3>Facilitateurs de l'IA</h3></div>
+        <div class="ph">Les briques logicielles qui exploitent l'IA</div>
+        <div class="bigpct">10 %</div>
+        <div class="tag" style="margin-top:8px">du portefeuille · ~20 % de l'univers</div>
+        <p style="margin-top:14px;font-size:13.5px;color:var(--muted)">Gestion &amp; stockage des données, AIOps, cybersécurité, conseil &amp; stratégie. Poche sur laquelle la gestion a concentré ses convictions en 2026 (Datadog, Snowflake, Palo Alto, CrowdStrike, MongoDB).</p>
+      </div>
+      <div class="card">
+        <div class="dimhead"><div class="dimnum" style="background:#5a6b85">3</div><h3>Utilisateurs de l'IA</h3></div>
+        <div class="ph">Les entreprises qui créent de la valeur via l'IA</div>
+        <div class="bigpct">9 %</div>
+        <div class="tag" style="margin-top:8px">du portefeuille · ~20 % de l'univers</div>
+        <p style="margin-top:14px;font-size:13.5px;color:var(--muted)">Ciblage d'audience, marketing / CRM, utilisateurs industriels (biotech, design), propriétaires de Big Data. Sélection restreinte aux usages réellement créateurs de valeur.</p>
+      </div>
+    </div>
+
+    <div class="infobox">
+      <h3>Lecture&nbsp;: facteurs explicatifs de la performance 2026</h3>
+      <p>L'exposition <span class="hi">infrastructures + mémoire</span> (TSMC, SK Hynix, Samsung, AMD, Broadcom, NVIDIA) a capté la nouvelle vague de CAPEX des hyperscalers. En parallèle, la poche <span class="hi">logiciel de qualité</span> (cybersécurité, DevOps, bases de données), renforcée pendant la correction du software de début 2026, a fortement rebondi au printemps. Combinées, ces deux poches expliquent la surperformance YTD 2026 (+34,9 % contre +30,0 % pour l'indice).</p>
+    </div>
+
+    <div class="grid2" style="margin-top:24px">
+      <div class="card">
+        <h3>Processus d'investissement en quatre étapes</h3>
+        <table class="idtable" style="margin-top:8px">
+          <tr><td>1 · Univers</td><td class="lng">Univers thématique (RBICS, analyse textuelle NLP) puis univers éligible (liquidité, ≥ 3 analystes)&nbsp;; exclusions ESG normatives &amp; sectorielles</td></tr>
+          <tr><td>2 · Génération d'idées</td><td class="lng">Double approche&nbsp;: valeur économique long terme (HOLT / EVA) &amp; analyse factorielle de marché (FactSet)</td></tr>
+          <tr><td>3 · Due diligence</td><td class="lng">Approche TVT (Thèse / Valorisation / Timing)&nbsp;; synergie avec ~40 analystes Amundi</td></tr>
+          <tr><td>4 · Construction</td><td class="lng">Portefeuille de conviction ajusté du risque (Barra), discipline d'achat / vente, suivi ESG &gt; indice</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Carte d'identité</h3>
+        <table class="idtable" style="margin-top:8px">
+          <tr><td>Code ISIN</td><td>LU2860962476</td></tr>
+          <tr><td>Date de création</td><td>10/10/2024</td></tr>
+          <tr><td>Forme juridique</td><td>SICAV luxembourgeoise · UCITS</td></tr>
+          <tr><td>Société de gestion</td><td>CPR Asset Management</td></tr>
+          <tr><td>Classification SFDR</td><td>Article 8</td></tr>
+          <tr><td>Frais de gestion</td><td>0,97 % · commission de surperformance&nbsp;: oui</td></tr>
+          <tr><td>Souscription minimale</td><td>100 000 € (part I)</td></tr>
+          <tr><td>Horizon recommandé</td><td>5 ans minimum · risque 5/7</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTEFEUILLE -->
+<section class="alt" id="portefeuille">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">03 · Composition au 31/05/2026</div>
+      <h2>Composition du portefeuille</h2>
+      <p>La structure du portefeuille éclaire la lecture des mouvements de la VL. La prédominance des semi-conducteurs et des hyperscalers explique la sensibilité aux événements «&nbsp;IA&nbsp;» (choc DeepSeek, craintes de bulle)&nbsp;; la surpondération des pays émergents (Corée, Taïwan) est le principal moteur de la surperformance 2026.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Top 10 des positions</h3>
+        <div class="ph">≈ 50,6 % de l'actif · source factsheet 31/05/2026</div>
+        <div id="holdings"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div class="card">
+          <h3>Répartition géographique</h3>
+          <div class="ph">Portefeuille vs indice · la surpondération émergente est déterminante en 2026</div>
+          <div class="alloc" id="geo"></div>
+        </div>
+        <div class="card">
+          <h3>Répartition sectorielle</h3>
+          <div class="alloc" id="sector"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid3" style="margin-top:22px">
+      <div class="card"><div class="ph" style="margin:0">Technologies de l'information</div><div class="bigpct">80,5 %</div><div class="tag" style="margin-top:6px">cœur du portefeuille</div></div>
+      <div class="card"><div class="ph" style="margin:0">Pays émergents</div><div class="bigpct">19,4 %</div><div class="tag" style="margin-top:6px">indice&nbsp;: 10,9 %</div></div>
+      <div class="card"><div class="ph" style="margin:0">Exposition USD / KRW / TWD</div><div class="bigpct">82 / 7 / 6 %</div><div class="tag" style="margin-top:6px">Corée &amp; Taïwan&nbsp;: mémoire &amp; fonderie</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section id="performance">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">04 · Performance nette</div>
+      <h2>Performance nette de frais (part I EUR)</h2>
+      <p>Point d'attention pour la maîtrise du dossier&nbsp;: le fonds a sous-performé son indice en 2025, sa première année civile pleine, avant de le devancer nettement en 2026. Performances supérieures à 1 an annualisées.</p>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table class="perf-table">
+        <thead>
+          <tr><th>Performance nette (EUR)</th><th>1 mois</th><th>3 mois</th><th>YTD 2026</th><th>1 an</th><th>2025</th><th>Depuis création*</th></tr>
+        </thead>
+        <tbody>
+          <tr class="fundrow"><td>CPR Invest - Artificial Intelligence</td><td>+19,24 %</td><td>+38,18 %</td><td class="pos">+34,86 %</td><td>+54,80 %</td><td>+5,46 %</td><td>+31,25 %</td></tr>
+          <tr><td>Indice MSCI ACWI IMI AI Select</td><td>+17,29 %</td><td>+34,12 %</td><td>+29,98 %</td><td>+54,90 %</td><td>+12,02 %</td><td>+33,12 %</td></tr>
+          <tr><td>Écart (points de %)</td><td class="pos">+1,95</td><td class="pos">+4,06</td><td class="pos">+4,88</td><td class="neg">-0,10</td><td class="neg">-6,55</td><td class="neg">-1,87</td></tr>
+        </tbody>
+      </table>
+      <p class="note">*Annualisée depuis le 10/10/2024. Volatilité du portefeuille&nbsp;: 21,1 % sur 1 an / 24,2 % depuis le lancement. Source&nbsp;: factsheet CPRAM au 31/05/2026.</p>
+    </div>
+
+    <div class="grid3" style="margin-top:22px">
+      <div class="card"><div class="ph" style="margin:0 0 4px">Repli maximal</div><div class="bigpct" style="color:var(--neg)">-29 %</div><p style="font-size:13px;color:var(--muted);margin:8px 0 0">Du pic (février 2025) au creux du 08/04/2025, en pleine guerre tarifaire «&nbsp;Liberation Day&nbsp;».</p></div>
+      <div class="card"><div class="ph" style="margin:0 0 4px">Plus forte hausse journalière</div><div class="bigpct" style="color:var(--pos)">+9,2 %</div><p style="font-size:13px;color:var(--muted);margin:8px 0 0">Le 09/04/2025, à l'annonce de la pause de 90 jours sur les tarifs douaniers.</p></div>
+      <div class="card"><div class="ph" style="margin:0 0 4px">Meilleur mois · mai 2026</div><div class="bigpct" style="color:var(--pos)">+19,2 %</div><p style="font-size:13px;color:var(--muted);margin:8px 0 0">Porté par le software (Datadog, Snowflake +88 %) et la mémoire (Micron +89 %, SK Hynix +79 %).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- THESE -->
+<section class="alt" id="these">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">05 · Thèse d'investissement &amp; contexte</div>
+      <h2>Cadre d'analyse</h2>
+      <p>Éléments structurant le thème, conformes aux supports officiels CPR AM (pitchbook). L'intelligence artificielle s'inscrit dans une nouvelle vague longue d'innovation au sens de la théorie schumpétérienne de la «&nbsp;destruction créatrice&nbsp;»&nbsp;: après la vapeur, l'électricité, la pétrochimie puis l'internet, l'IA &amp; l'IoT constituent la sixième vague, dont l'adoption devrait transformer l'ensemble des secteurs sur les 10 à 15 prochaines années.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="these-card">
+        <div class="n">01</div>
+        <h3>Une vague de CAPEX sans précédent</h3>
+        <p>Le besoin en infrastructures de l'IA croît rapidement. Les hyperscalers (Alphabet, Amazon, Microsoft, Meta) prévoient ≈ 725 Md$ d'investissements en 2026, dont environ 75 % vers l'infrastructure IA (GPU, réseau, centres de données). Le fonds est positionné en amont de cette chaîne de valeur, là où la visibilité sur la demande est la plus forte.</p>
+      </div>
+      <div class="these-card">
+        <div class="n">02</div>
+        <h3>Des valorisations soutenues par les bénéfices</h3>
+        <p>CPR AM rappelle que la configuration diffère de la bulle internet de 2000 (parallèle Cisco souvent cité)&nbsp;: cette fois, les bénéfices suivent, voire dépassent, les attentes. Le P/E anticipé du portefeuille (~22,7×) s'appuie sur une croissance attendue des BPA de l'ordre de 26 %/an. L'univers présente un biais croissance et qualité supérieur au MSCI Monde (ROE 33 % vs 26 %).</p>
+      </div>
+      <div class="these-card">
+        <div class="n">03</div>
+        <h3>Un indice co-construit avec MSCI</h3>
+        <p>Le MSCI ACWI IMI Artificial Intelligence Select Issuer Capped a été développé sur mesure pour épouser la philosophie du fonds&nbsp;: sélection sur score de pertinence thématique, intégration des semi-conducteurs (&gt; 10 Md$ de capitalisation), plafonnement à 5 % par émetteur et large spectre de capitalisations.</p>
+      </div>
+      <div class="these-card">
+        <div class="n">04</div>
+        <h3>Gestion active &amp; intégration ESG</h3>
+        <p>Classé SFDR Article 8, le fonds vise un score ESG supérieur à son indice («&nbsp;Beat the Benchmark&nbsp;»). Équipe de gestion thématique expérimentée, rattachée au pôle Progress de CPR AM (groupe Amundi), s'appuyant sur une discipline d'achat / vente et un suivi mensuel des risques (Barra).</p>
+      </div>
+    </div>
+
+    <div class="subhead">Trois moteurs expliquent l'essor récent de l'IA</div>
+    <div class="grid3">
+      <div class="driver"><div class="dn">1</div><h4>Le calcul parallèle</h4><p>La puissance de calcul requise par les modèles a été multipliée par dix à chaque nouvelle itération. Les puces spécialisées (GPU) rendent enfin ces calculs massivement parallèles économiquement viables.</p></div>
+      <div class="driver"><div class="dn">2</div><h4>Le Big Data</h4><p>La donnée est la ressource clé de l'IA. On estime à 463 exaoctets le volume créé chaque jour dans le monde à l'horizon 2025, alors que 60 à 73 % des données d'entreprise ne sont aujourd'hui jamais analysées.</p></div>
+      <div class="driver"><div class="dn">3</div><h4>Les réseaux de neurones</h4><p>Les architectures de réseaux de neurones (transformers, modèles de langage) gagnent en complexité et en capacité, ouvrant la voie à l'IA générative et à des usages transverses à tous les secteurs.</p></div>
+    </div>
+
+    <div class="subhead">Des attentes élevées, documentées</div>
+    <div class="factrow">
+      <span class="fact">Productivité&nbsp;: <b>jusqu'à +40 %</b> (McKinsey)</span>
+      <span class="fact">Valeur potentielle&nbsp;: <b>4 400 Md$</b> tous secteurs (McKinsey)</span>
+      <span class="fact">Assistants virtuels&nbsp;: <b>25 % des entreprises</b> d'ici 2027 (Gartner)</span>
+      <span class="fact">R&amp;D pharma&nbsp;: <b>-30 % de temps</b> pour développer un médicament (PwC)</span>
+      <span class="fact">Cybersécurité&nbsp;: <b>69 % des entreprises</b> jugent l'IA essentielle (Capgemini)</span>
+      <span class="fact">Utilisateurs d'outils IA&nbsp;: <b>&gt; 250 M</b> en 2023, le double de 2020</span>
+      <span class="fact">Horizon de la thèse&nbsp;: <b>10 à 15 ans</b></span>
+    </div>
+    <p class="note">Sources&nbsp;: pitchbook CPR Invest - Artificial Intelligence (mai 2026), McKinsey, Gartner, PwC, Capgemini, Statista, Goldman Sachs. À titre illustratif&nbsp;; ces estimations sont susceptibles d'évoluer et n'offrent aucune garantie de réalisation.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>CPR Asset Management</h4>
+        <p>91-93, boulevard Pasteur · 75015 Paris<br>Centre d'expertise thématique du groupe Amundi.<br>SGP agréée par l'AMF n° GP01-056.</p>
+        <p style="margin-top:10px"><a href="https://cpram.com/fra/fr/institutionnels/products/LU2860962476">Fiche produit officielle &amp; documentation →</a></p>
+      </div>
+      <div>
+        <h4>Sources de données</h4>
+        <p>Cours &amp; VL&nbsp;: exports CPRAM, Allianz GI, DWS, ODDO BHF, Mirova, LFDE, Euronext.<br>Caractéristiques &amp; portefeuille&nbsp;: factsheet CPRAM 31/05/2026 &amp; pitchbook mai 2026.<br>Événements&nbsp;: presse financière (CNBC, Bloomberg, Reuters, NBC, AP, Fortune…), liens dans chaque fiche.</p>
+      </div>
+      <div>
+        <h4>Repères graphique</h4>
+        <div class="legendmini" id="footLegend"></div>
+      </div>
+    </div>
+    <p class="disc">Communication promotionnelle destinée exclusivement aux investisseurs professionnels au sens de la directive MIF. Ce document est fourni à titre d'information et ne constitue ni un conseil en investissement, ni une recommandation, ni une sollicitation d'achat ou de vente. Le fonds présente un risque de perte en capital&nbsp;; sa valeur liquidative peut fluctuer à la hausse comme à la baisse et le capital investi n'est pas garanti. Risques notables&nbsp;: actions / marché (dont petites capitalisations et marchés émergents), change, contrepartie, liquidité. Les performances passées ne préjugent pas des performances futures et ne sont pas constantes dans le temps. Avant toute décision, se référer au Prospectus et au DIC PRIIPs disponibles sur cpram.com. Document de travail à usage interne&nbsp;; en cas d'écart, les documents légaux et la factsheet officielle font foi.</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="mtop">
+    <button class="mclose" id="modalClose" aria-label="Fermer">✕</button>
+    <div class="mdt" id="mDate"></div>
+    <h3 id="mTitle"></h3>
+  </div>
+  <div class="mbody" id="mBody"></div>
+  <div class="impact" id="mImpact"></div>
+  <div class="sources" id="mSources"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
