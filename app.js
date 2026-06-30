@@ -8,7 +8,7 @@
 const SERIES = {
   cpram:    {name:"CPR Invest - Artificial Intelligence", short:"CPR Invest - AI", color:"#009EE0", width:3.4, fund:true, on:true},
   allianz:  {name:"Allianz Global Artificial Intelligence", short:"Allianz Global AI", color:"#001C4B", width:1.8, on:false},
-  dwa:      {name:"DWA Intelligence Artificielle", short:"DWA Intelligence Artificielle", color:"#8E5BEF", width:1.8, on:false},
+  dwa:      {name:"DWS Artificial Intelligence", short:"DWS AI", color:"#8E5BEF", width:1.8, on:false},
   oddo:     {name:"ODDO BHF Artificial Intelligence", short:"ODDO BHF AI", color:"#14B8A6", width:1.8, on:false},
   mirova:   {name:"Mirova Global Thematic AI & Robotics", short:"Mirova AI & Robotics", color:"#F59E0B", width:1.8, on:false},
   echiquier:{name:"Echiquier Artificial Intelligence", short:"Echiquier AI", color:"#D6336C", width:1.8, on:false},
