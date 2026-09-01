@@ -186,6 +186,7 @@ const EVENTS = [
   body:`<p>Après plusieurs mois de hausse exceptionnelle, les valeurs liées aux semi-conducteurs subissent une correction brutale. Le 16 juillet, les valeurs technologiques asiatiques reculent fortement, notamment Samsung Electronics et SK Hynix.</p><p>Le marché commence à s'interroger sur la capacité des hyperscalers à générer suffisamment de revenus pour justifier l'explosion des investissements dans les data centers, GPU et mémoire. Cette remise en question touche directement le fonds, fortement exposé à l'infrastructure IA et aux semi-conducteurs asiatiques.</p>`,
   sources:[
     {l:"Reuters",u:"https://www.reuters.com/world/china/global-markets-view-europe-2026-07-16/"}
+  ]
 },
 
 { id:19,
@@ -199,6 +200,7 @@ const EVENTS = [
   body:`<p>Alphabet publie une forte accélération de Google Cloud, portée par la demande en capacités de calcul liées à l'IA.</p><p>Dans le même temps, le groupe relève encore ses investissements dans les infrastructures et les data centers. Le marché s'interroge davantage sur la rentabilité future de ces dépenses massives, malgré la croissance très forte des activités liées à l'IA.</p>`,
   sources:[
     {l:"Reuters",u:"https://www.reuters.com/business/google-quarterly-cloud-revenue-growth-beats-expectations-2026-07-22/"}
+  ]
 },
 
 { id:20,
@@ -212,6 +214,7 @@ const EVENTS = [
   body:`<p>Amazon publie une forte croissance d'AWS, soutenue par la demande pour les services cloud et les capacités de calcul liées à l'intelligence artificielle.</p><p>Le groupe maintient un niveau d'investissement très élevé dans les data centers et explique que la capacité disponible reste insuffisante face à la demande. Le message rassure le marché sur la solidité du cycle d'investissement IA.</p>`,
   sources:[
     {l:"Reuters",u:"https://www.reuters.com/business/retail-consumer/amazon-beats-estimates-quarterly-cloud-revenue-growth-2026-07-30/"}
+  ]
 },
 
 { id:21,
@@ -225,6 +228,7 @@ const EVENTS = [
   body:`<p>Arista Networks publie des perspectives supérieures aux attentes, soutenues par la demande pour ses équipements réseau utilisés dans les infrastructures de calcul IA.</p><p>L'événement est particulièrement intéressant pour le fonds car il confirme que l'expansion des clusters IA ne bénéficie pas uniquement aux GPU et à la mémoire, mais également aux infrastructures réseau nécessaires pour connecter ces systèmes.</p>`,
   sources:[
     {l:"Reuters",u:"https://www.reuters.com/business/media-telecom/arista-forecasts-upbeat-quarterly-revenue-ai-driven-networking-demand-2026-08-04/"}
+  ]
 },
 
 { id:22,
@@ -237,8 +241,8 @@ const EVENTS = [
   holdings:"NVIDIA, Broadcom, SK Hynix, Samsung, AMD, TSMC : soutien à l'ensemble de la chaîne d'infrastructure IA.",
   body:`<p>NVIDIA publie de nouveaux résultats très solides et rassure un marché qui s'interrogeait depuis plusieurs semaines sur la soutenabilité des dépenses d'infrastructure IA.</p><p>La demande pour les GPU et les infrastructures de data centers reste élevée, ce qui soutient également les fournisseurs de mémoire, de semi-conducteurs et de composants réseau détenus dans le portefeuille.</p>`,
   sources:[
-  {l:"Reuters",u:"https://www.reuters.com/business/nvidia-rises-after-signaling-longer-ai-spending-runway-2026-08-27/"}
-]
+    {l:"Reuters",u:"https://www.reuters.com/business/nvidia-rises-after-signaling-longer-ai-spending-runway-2026-08-27/"}
+  ]
 }
 ];
 EVENTS.forEach(e=>e.t=parseD(e.date));
