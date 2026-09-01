@@ -174,7 +174,72 @@ const EVENTS = [
   holdings:"Repli généralisé « risk-off » après un parcours exceptionnel ; rotation hors des gagnants.",
   body:`<p>Après un sommet historique début juin, le marché reflue. Donald Trump juge les négociations avec l'Iran «&nbsp;trop longues&nbsp;» et menace d'agir ; le pétrole grimpe (WTI autour de 90 $, Brent ~93 $) et les rendements obligataires montent sur fond de craintes inflationnistes. Le S&P 500 cède 1,6 % le 9 juin.</p><p>Le fonds, après une hausse marquée, subit d'importantes prises de bénéfices (-5,6 % le 5 juin, après un pic de la VL à 162,2 le 2 juin). Rappel utile pour le client : le thème reste volatil (volatilité ~21 % sur 1 an) et l'horizon de placement recommandé est de 5 ans minimum.</p>`,
   sources:[{l:"CNBC",u:"https://www.cnbc.com/2026/06/09/stock-market-today-live-updates.html"},{l:"Bloomberg",u:"https://www.bloomberg.com/news/articles/2026-06-07/us-stock-futures-drop-after-tech-selloff-oil-up-markets-wrap"}] },
-];
+   
+{ id:18,
+  date:"2026-07-16",
+  cat:"ia",
+  title:"Doutes sur la rentabilité du CAPEX IA",
+  short:"Violente correction des semi-conducteurs asiatiques : le marché questionne le retour sur investissement des dépenses IA.",
+  move:"À calculer sur la VL",
+  moveSign:-1,
+  holdings:"Samsung Electronics, SK Hynix, TSMC, NVIDIA, AMD : prises de bénéfices sur la chaîne d'infrastructure IA.",
+  body:`<p>Après plusieurs mois de hausse exceptionnelle, les valeurs liées aux semi-conducteurs subissent une correction brutale. Le 16 juillet, les valeurs technologiques asiatiques reculent fortement, notamment Samsung Electronics et SK Hynix.</p><p>Le marché commence à s'interroger sur la capacité des hyperscalers à générer suffisamment de revenus pour justifier l'explosion des investissements dans les data centers, GPU et mémoire. Cette remise en question touche directement le fonds, fortement exposé à l'infrastructure IA et aux semi-conducteurs asiatiques.</p>`,
+  sources:[
+    {l:"Reuters",u:"https://www.reuters.com/world/china/global-markets-view-europe-2026-07-16/"}
+},
+
+{ id:19,
+  date:"2026-07-23",
+  cat:"ia",
+  title:"Alphabet : l'IA accélère, le CAPEX inquiète",
+  short:"Google Cloud accélère fortement mais Alphabet relève encore ses dépenses d'investissement.",
+  move:"À calculer sur la VL",
+  moveSign:-1,
+  holdings:"Alphabet ; impact plus large sur les hyperscalers et la chaîne de fournisseurs de data centers.",
+  body:`<p>Alphabet publie une forte accélération de Google Cloud, portée par la demande en capacités de calcul liées à l'IA.</p><p>Dans le même temps, le groupe relève encore ses investissements dans les infrastructures et les data centers. Le marché s'interroge davantage sur la rentabilité future de ces dépenses massives, malgré la croissance très forte des activités liées à l'IA.</p>`,
+  sources:[
+    {l:"Reuters",u:"https://www.reuters.com/business/google-quarterly-cloud-revenue-growth-beats-expectations-2026-07-22/"}
+},
+
+{ id:20,
+  date:"2026-07-30",
+  cat:"ia",
+  title:"Amazon : AWS confirme la demande d'infrastructure IA",
+  short:"AWS accélère et Amazon continue d'augmenter massivement ses investissements dans les infrastructures IA.",
+  move:"À calculer sur la VL",
+  moveSign:1,
+  holdings:"Amazon, NVIDIA, AMD, Broadcom, Samsung, SK Hynix : soutien à l'ensemble de la chaîne d'infrastructure.",
+  body:`<p>Amazon publie une forte croissance d'AWS, soutenue par la demande pour les services cloud et les capacités de calcul liées à l'intelligence artificielle.</p><p>Le groupe maintient un niveau d'investissement très élevé dans les data centers et explique que la capacité disponible reste insuffisante face à la demande. Le message rassure le marché sur la solidité du cycle d'investissement IA.</p>`,
+  sources:[
+    {l:"Reuters",u:"https://www.reuters.com/business/retail-consumer/amazon-beats-estimates-quarterly-cloud-revenue-growth-2026-07-30/"}
+},
+
+{ id:21,
+  date:"2026-08-04",
+  cat:"fonds",
+  title:"Arista rebondit avec la demande réseau IA",
+  short:"Arista dépasse les attentes et confirme la vigueur des investissements dans les réseaux de data centers.",
+  move:"À calculer sur la VL",
+  moveSign:1,
+  holdings:"Arista Networks ; lecture positive pour l'ensemble de l'infrastructure réseau des data centers IA.",
+  body:`<p>Arista Networks publie des perspectives supérieures aux attentes, soutenues par la demande pour ses équipements réseau utilisés dans les infrastructures de calcul IA.</p><p>L'événement est particulièrement intéressant pour le fonds car il confirme que l'expansion des clusters IA ne bénéficie pas uniquement aux GPU et à la mémoire, mais également aux infrastructures réseau nécessaires pour connecter ces systèmes.</p>`,
+  sources:[
+    {l:"Reuters",u:"https://www.reuters.com/business/media-telecom/arista-forecasts-upbeat-quarterly-revenue-ai-driven-networking-demand-2026-08-04/"}
+},
+
+{ id:22,
+  date:"2026-08-27",
+  cat:"ia",
+  title:"NVIDIA confirme que le boom IA reste intact",
+  short:"Résultats très solides et perspectives fortes : NVIDIA rassure sur la poursuite du cycle d'investissement IA.",
+  move:"À calculer sur la VL",
+  moveSign:1,
+  holdings:"NVIDIA, Broadcom, SK Hynix, Samsung, AMD, TSMC : soutien à l'ensemble de la chaîne d'infrastructure IA.",
+  body:`<p>NVIDIA publie de nouveaux résultats très solides et rassure un marché qui s'interrogeait depuis plusieurs semaines sur la soutenabilité des dépenses d'infrastructure IA.</p><p>La demande pour les GPU et les infrastructures de data centers reste élevée, ce qui soutient également les fournisseurs de mémoire, de semi-conducteurs et de composants réseau détenus dans le portefeuille.</p>`,
+  sources:[
+    {l:"Reuters",u:"https://www.reuters.com/business/nvidia-rises-after-signaling-longer-ai-spending-runway-2026-08-27/"}
+  ]
+}
 EVENTS.forEach(e=>e.t=parseD(e.date));
 const CAT_LABEL={ia:"IA",macro:"Macro / politique",fonds:"Fonds"};
 const CAT_COLOR={ia:"#0082b8",macro:"#001C4B",fonds:"#9a6a00"};
