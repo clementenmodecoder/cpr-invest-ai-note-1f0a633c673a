@@ -237,9 +237,10 @@ const EVENTS = [
   holdings:"NVIDIA, Broadcom, SK Hynix, Samsung, AMD, TSMC : soutien à l'ensemble de la chaîne d'infrastructure IA.",
   body:`<p>NVIDIA publie de nouveaux résultats très solides et rassure un marché qui s'interrogeait depuis plusieurs semaines sur la soutenabilité des dépenses d'infrastructure IA.</p><p>La demande pour les GPU et les infrastructures de data centers reste élevée, ce qui soutient également les fournisseurs de mémoire, de semi-conducteurs et de composants réseau détenus dans le portefeuille.</p>`,
   sources:[
-    {l:"Reuters",u:"https://www.reuters.com/business/nvidia-rises-after-signaling-longer-ai-spending-runway-2026-08-27/"}
-  ]
+  {l:"Reuters",u:"https://www.reuters.com/business/nvidia-rises-after-signaling-longer-ai-spending-runway-2026-08-27/"}
+]
 }
+];
 EVENTS.forEach(e=>e.t=parseD(e.date));
 const CAT_LABEL={ia:"IA",macro:"Macro / politique",fonds:"Fonds"};
 const CAT_COLOR={ia:"#0082b8",macro:"#001C4B",fonds:"#9a6a00"};
